@@ -37,6 +37,9 @@ spec:
         - name: machine-id
           mountPath: /etc/machine-id
           readOnly: true
+        - name: hostname
+          mountPath: /etc/hostname
+          readOnly: true
         - name: journal
           mountPath: /var/log/journal
           readOnly: true
@@ -46,6 +49,9 @@ spec:
       - name: machine-id
         hostPath:
           path: /etc/machine-id
+      - name: hostname
+        hostPath:
+          path: /etc/hostname
       - name: var-log
         hostPath:
           path: /var/log
