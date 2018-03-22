@@ -1,0 +1,54 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: journald-to-syslog
+  labels:
+    app: journald-to-syslog
+spec:
+  updateStrategy:
+    type: RollingUpdate
+
+  selector:
+    matchLabels:
+      daemon: journald-to-syslog
+
+  template:
+    metadata:
+      name: journald-to-syslog
+      labels:
+        daemon: journald-to-syslog
+    spec:
+      tolerations:
+      - operator: "Exists"
+        effect: "NoSchedule"
+      containers:
+      - name: journald-to-syslog
+        image: outcoldsolutions/journald-to-syslog
+        securityContext:
+          privileged: true
+        resources:
+          limits:
+            cpu: 1
+            memory: 128Mi
+          requests:
+            cpu: 50m
+            memory: 32Mi
+        volumeMounts:
+        - name: machine-id
+          mountPath: /etc/machine-id
+          readOnly: true
+        - name: journal
+          mountPath: /var/log/journal
+          readOnly: true
+        - name: var-log
+          mountPath: /rootfs/var/log/
+      volumes:
+      - name: machine-id
+        hostPath:
+          path: /etc/machine-id
+      - name: var-log
+        hostPath:
+          path: /var/log
+      - name: journal
+        hostPath:
+          path: /var/log/journal
