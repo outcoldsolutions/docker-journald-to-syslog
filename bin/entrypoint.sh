@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [[ -z "${KUBERNETES_NODENAME}" ]]; then
     hostname $(cat /etc/hostname)
